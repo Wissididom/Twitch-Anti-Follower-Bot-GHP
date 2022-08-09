@@ -50,7 +50,7 @@ function connectImpl(username, password, channels) {
 			// Example message: "Buy viewers, followers and primes on website. com"
 			// Example message: "Wanna become famous? Buy viewers, followers and primes on website. shop "
 			// Example message: "Get viewers, followers and primes on website. com"
-			if (message.match(/.*(?:Buy|Get) (?:(?:viewers|followers|primes|and),? ?)+ on .+\. ?(?:com|shop|store)/gi)) {
+			if (message.match(/.*(?:Buy|Get) (?:(?:viewers|followers|primes|and|or),? ?)+ on .+\. ?(?:\w|-|\. ?)+/gi)) {
 				try {
 					await client.deletemessage(channel, tags.id);
 					response = 'Deleted Message by ' + tags.username + ': ' + message;
