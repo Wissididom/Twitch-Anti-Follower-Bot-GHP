@@ -1,10 +1,10 @@
 var accessToken = getHashValue('access_token');
 var client;
-function addListEntry(html, id) {
+function addListEntry(txt, id) {
 	let ul = document.getElementById('chat');
 	let li = document.createElement('li');
 	let textNode = document.createElement('span');
-	textNode.innerHTML = html;
+	textNode.innerText = txt;
 	textNode.setAttribute('id', id);
 	li.appendChild(textNode);
 	ul.appendChild(li);
@@ -29,14 +29,14 @@ function connectImpl(username, password, channels) {
 	});
 	client.connect().then(([server, port]) => {
 		var statusBox = document.getElementById('statusBox');
-		statusBox.innerHTML = 'Connected to ' + server + ':' + port;
+		statusBox.innerText = `Connected to ${server}:${port}`;
 		statusBox.classList = 'green';
-		console.log('Connected to ' + server + ':' + port);
+		console.log(`Connected to ${server}:${port}`);
 	}).catch(err => {
 		var statusBox = document.getElementById('statusBox');
-		statusBox.innerHTML = 'Error connecting to Twitch Chat: ' + err;
+		statusBox.innerText = `Error connecting to Twitch Chat: ${err}`;
 		statusBox.classList = 'red';
-		console.error('Error connecting to Twitch Chat: ' + err);
+		console.error(`Error connecting to Twitch Chat: ${err}`);
 	});
 	client.on('message', async (channel, tags, message, self) => {
 		// if (self) return; // Ignore echoed messages.
@@ -45,20 +45,20 @@ function connectImpl(username, password, channels) {
 		}
 		let response = '';
 		if (tags.badges && (tags.badges.broadcaster || tags.badges.moderator || tags.badges.subscriber || tags.badges.vip)) {
-			response = 'Bypassed by Badges of ' + tags.username + ': ' + message;
+			response = `Bypassed by Badges of ${tags.username}: ${message}`;
 		} else {
 			// Example message: "Buy viewers, followers and primes on website. com"
 			// Example message: "Wanna become famous? Buy viewers, followers and primes on website. shop "
 			// Example message: "Get viewers, followers and primes on website. com"
-			if (message.match(/.*(?:Buy|Get) (?:(?:viewers|followers|primes|and|or),? ?)+ on .+\. ?(?:\w|-|\. ?)+/gi)) {
+			if (message.match(/.*(?:Buy|Get) (?:(?:viewers|followers|primes|and|or) ?,? ?)+ on .+\. ?(?:\w|-|\. ?)+/gi)) {
 				try {
 					await client.deletemessage(channel, tags.id);
-					response = 'Deleted Message by ' + tags.username + ': ' + message;
+					response = `Deleted Message by ${tags.username}: ${message}`;
 				} catch (err) {
-					response = 'Couldn\' delete Message due to: ' + err;
+					response = `Couldn't delete Message due to: ${err}`;
 				}
 			} else {
-				response = 'Not Bypassed by Badges of ' + tags.username + ': ' + message;
+				response = `Not Bypassed by Badges of ${tags.username}: ${message}`;
 			}
 		}
 		console.log(response);
